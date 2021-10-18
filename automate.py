@@ -28,4 +28,3 @@ def Automate(week_number):
             SecondIterationOnwards(files[i])
 
     os.remove('skeletal_file.xlsx')
-Automate(40)
