@@ -17,11 +17,12 @@ def CreatingSkeletalFile(file,weeks):
     write_sheet = wb_write.get_sheet_by_name("Final Data")
     j = 1
     # creating columns (30) containing call response | call status | calls
-    weeks = weeks*3 + 18
-    for i in range(18,weeks,3):
+    weeks = weeks*3 + 20
+    for i in range(20,weeks,3):
         write_sheet.cell(1,i).value = 'Week ' + str(j) + ' call response'
         write_sheet.cell(1,i+1).value = 'Week ' + str(j) + ' call status'
         write_sheet.cell(1,i+2).value = 'Week ' + str(j) + ' calls'
         j += 1
 
     wb_write.save("skeletal_file.xlsx")
+# CreatingSkeletalFile('Week 1.xlsx',30)

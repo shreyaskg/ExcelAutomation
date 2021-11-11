@@ -6,6 +6,7 @@ from datetime import date
 from SecondIterationOnwards import SecondIterationOnwards
 from CreateSkeleton import CreatingSkeletalFile
 from FirstIteration import FirstIteration
+from SetParticipants import SetParticipants
 
 # The program will dynamically generate number of weeks as per input
 def Automate(week_number):
@@ -17,8 +18,8 @@ def Automate(week_number):
         f_name = "Week " + str(i) + ".xlsx"
         if os.path.isfile(f_name):
             files.append(f_name)
-    for i in range(1,len(files)):
-        if i == 1:
+    for i in range(0,len(files)):
+        if i == 0:
             # Then we have to make the skeletal file,use FirstIteration
             CreatingSkeletalFile(files[i],week_number)
             FirstIteration(files[i])
@@ -27,4 +28,9 @@ def Automate(week_number):
             # The 'output.xlsx' created during the if statement wll be the skeleton for the function
             SecondIterationOnwards(files[i])
 
+    SetParticipants('output.xlsx')
+    # SetCollegeTier('output.xlsx')
     os.remove('skeletal_file.xlsx')
+
+# Automate(40)
+

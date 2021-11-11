@@ -1,2 +1,4 @@
 openpyxl
 pandas
+urrllib
+pygeohash

@@ -2,6 +2,11 @@ import openpyxl
 import datetime
 import pandas as pd
 from datetime import date
+from GetStandardCollegeNamedistance import GetStandardName
+from GetStandardCollegeNamedistance import GetDistance
+from GetStandardCollegeNamedistance import GetParticipants
+from GetAge import GetDays
+from GetAge import GetAge
 
 # Loading the already written week 1 file
 def SecondIterationOnwards(file):
@@ -15,7 +20,7 @@ def SecondIterationOnwards(file):
     o_sheet_2 = wb_2["Callsheet"]
     data2 = []
     phone_numbers = []
-    for i in range(2,o_sheet_2.max_row + 3):
+    for i in range(2,o_sheet_2.max_row-3):
         individual_data = []
         for column in o_sheet_2[i]:
             individual_data.append(column.value)
@@ -52,7 +57,7 @@ def SecondIterationOnwards(file):
                 if data2 is None:
                     continue
                 try:
-                    if str(type(data2[i - 1][15])) == "<class 'datetime.datetime'>" and len(str(type(data[i - 1][15]))) > 5:
+                    if type(data2[i - 1][15]) == type(today):
                         weeks = (today - data2[i - 1][15]).days
 
                         if weeks % 7 == 0:
@@ -61,13 +66,33 @@ def SecondIterationOnwards(file):
                             # integer division
                             weeks = weeks // 7 + 1
                         # as per the weeks mentioned
-                        if weeks > 30:
-                            weeks = 30
+                        if weeks > 40:
+                            weeks = 40
 
-                        weeks = 15 + weeks * 3
+                        weeks = 17 + weeks * 3
                         write_sheet.cell(j+2, weeks).value = (data2[i][12])
                         write_sheet.cell(j+2, weeks + 1).value = (data2[i][13])
                         write_sheet.cell(j+2, weeks + 2).value = (data2[i][17])
+
+                        # Update the latest responses
+
+                        write_sheet.cell(j+2, 8).value = (data2[i][12])
+                        write_sheet.cell(j+2, 9).value = (data2[i][13])
+                        write_sheet.cell(j+2, 10).value = (data2[i][17])
+
+                        # Dynamic fields which are also static, as we will be retaining the latest response
+                        write_sheet.cell(j+2, 19).value = data2[i - 1][7]
+                        day = data2[i][6]
+                        ageofregistration = GetDays(day)
+                        write_sheet.cell(j+2, 6).value = ageofregistration
+
+                        day = data2[i][7]
+                        dateofprogram = -GetDays(day)
+                        write_sheet.cell(j+2, 7).value = dateofprogram
+
+                        # Date of attendance dynamic data
+                        # day = data2[i][]
+
                         flag = 1
                 except:
                     pass
@@ -80,7 +105,7 @@ def SecondIterationOnwards(file):
         if flag == 1:
             if data2[i][15] is None:
                 continue
-            if str(type(data2[i][15])) == "<class 'datetime.datetime'>" and len(str(type(data2[i][15]))) > 5:
+            if type(data2[i - 1][15]) == type(today):
                 weeks = (today - data2[i][15]).days
                 if weeks % 7 == 0:
                     weeks = weeks / 7
@@ -90,20 +115,47 @@ def SecondIterationOnwards(file):
                 # as per the weeks mentioned
                 if weeks > 30:
                     weeks = 30
-                weeks = 15 + weeks * 3
+                weeks = 17 + weeks * 3
                 # static fields
-                write_sheet.cell(total_rows -1 ,1).value = data2[i][0]
-                write_sheet.cell(total_rows - 1, 2).value = data2[i][1]
-                write_sheet.cell(total_rows - 1, 3).value = data2[i][2]
-                write_sheet.cell(total_rows - 1, 5).value = data2[i][4]
-                write_sheet.cell(total_rows - 1, 9).value = data2[i][20]
-                write_sheet.cell(total_rows - 1, 11).value = data2[i][22]
-                write_sheet.cell(total_rows - 1, 12).value = data2[i][23]
-                write_sheet.cell(total_rows - 1, 13).value = data2[i][24]
-                # dynamic fields
-                write_sheet.cell(total_rows - 1,weeks).value = data2[i][12]
-                write_sheet.cell(total_rows - 1, weeks + 1).value = data2[i][13]
-                write_sheet.cell(total_rows - 1, weeks + 2).value = data2[i][17]
+                write_sheet.cell(total_rows - 1, 1).value = data[i][0]
+                write_sheet.cell(total_rows - 1, 2).value = data[i][1]
+                write_sheet.cell(total_rows - 1, 3).value = data[i][3]
+                write_sheet.cell(total_rows - 1, 11).value = data[i][20]
+                write_sheet.cell(total_rows - 1, 13).value = data[i][22]
+                write_sheet.cell(total_rows - 1, 14).value = data[i][23]
+                write_sheet.cell(total_rows - 1, 15).value = data[i][24]
+
+                # dynamic data
+                write_sheet.cell(total_rows - 1, weeks + 1).value = data[i][13]
+                write_sheet.cell(total_rows - 1, weeks + 2).value = data[i][17]
+                write_sheet.cell(total_rows - 1, weeks).value = data[i][12]
+
+                # College dynamic field
+                college = data[i][4]
+                standard_college = GetStandardName(college)
+                write_sheet.cell(total_rows - 1, 5).value = standard_college
+                distance = GetDistance(standard_college)
+                write_sheet.cell(total_rows - 1, 17).value = distance
+
+                # Days dynamic field
+                day = data[i][6]
+                ageofregistration = GetDays(day)
+                write_sheet.cell(total_rows - 1, 6).value = ageofregistration
+
+                day = data[i][7]
+                dateofprogram = -GetDays(day)
+                write_sheet.cell(total_rows - 1, 7).value = dateofprogram
+
+                # Current week response dynamic field
+                write_sheet.cell(total_rows - 1, 8).value = data[i][12]
+                write_sheet.cell(total_rows - 1, 9).value = data[i][13]
+                write_sheet.cell(total_rows - 1, 10).value = data[i][17]
+
+                # Age Dynamic field
+                write_sheet.cell(total_rows - 1, 12).value = GetAge(data[i][21])
+
+                # Date of attendance
+                write_sheet.cell(total_rows - 1, 19).value = data[i][7]
                 total_rows += 1
         flag = 0
 
