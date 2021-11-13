@@ -7,7 +7,7 @@ import geopy
 from geopy import distance
 
 base_url = "https://maps.googleapis.com/maps/api/geocode/json?"
-AUTH_KEY = "AIzaSyDKLCOQ7zgXOQZqIvp853W6dXU1XMktmtk"
+AUTH_KEY = ""
 
 def GetStandardName(data):
     parameters = {
